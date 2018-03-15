@@ -6,19 +6,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  public searchTerm = '';
-  public isCollapsed = true;
+  searchTerm = '';
+  isCollapsed = true;
 
-  public collapse() {
+  collapse() {
     this.isCollapsed = true;
   }
 
-  public closeDropdown(dropdown) {
+  closeDropdown(dropdown) {
     dropdown.close();
   }
 
-  public search() {
+  logout() {}
 
-  }
+  search() {}
 
 }
