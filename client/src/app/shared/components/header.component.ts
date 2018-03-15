@@ -5,4 +5,20 @@ import { Component } from '@angular/core';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class AppComponent {}
+export class HeaderComponent {
+  public searchTerm = '';
+  public isCollapsed = true;
+
+  public collapse() {
+    this.isCollapsed = true;
+  }
+
+  public closeDropdown(dropdown) {
+    dropdown.close();
+  }
+
+  public search() {
+
+  }
+
+}
