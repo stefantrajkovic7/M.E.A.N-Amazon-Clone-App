@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import {DataService} from "./data.service";
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule
-  ]
+  ],
+  providers: [ DataService ]
 })
 export class SharedModule { }

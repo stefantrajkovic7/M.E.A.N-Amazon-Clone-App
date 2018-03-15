@@ -13,5 +13,5 @@ export class CoreService {
   post(link: string, body: any) {
     return this.http.post(link, body).toPromise();
   }
-  
+
 }

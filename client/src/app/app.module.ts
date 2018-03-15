@@ -10,6 +10,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {HeaderComponent} from "./shared/components/header.component";
 import {FooterComponent} from "./shared/components/footer.component";
 import {AppRoutingModule} from "./app-routing.module";
+import {MessageComponent} from "./components/message/message.component";
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {AppRoutingModule} from "./app-routing.module";
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
