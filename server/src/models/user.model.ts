@@ -36,3 +36,6 @@ UserSchema.pre('save', (next: NextFunction) => {
 
     })
 });
+
+UserSchema.methods.comparePassword = password => bcrypt.compareSync(password, this.password);
+
