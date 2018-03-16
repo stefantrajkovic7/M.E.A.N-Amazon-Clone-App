@@ -4,8 +4,11 @@ import * as bodyParser from "body-parser";
 import * as mongoose from "mongoose";
 import * as morgan from 'morgan';
 import * as bluebird from 'bluebird';
-import * as cors from 'cors';
+import * as cors from "cors";
 import {mongoURI} from "./config/development";
+
+import * as userController from "./controllers/account";
+const API_URL = 'http://localhost:4200';
 
 // Create Express server
 const app = express();
@@ -27,12 +30,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
 // CORS
-app.use(cors());
+const options:cors.CorsOptions = {
+    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
+    credentials: true,
+    methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+    origin: API_URL,
+    preflightContinue: false
+};
+
+app.use(cors(options));
 
 app.get("/", (req: Request, res: Response) => {
     res.json({
         message: 'Hello World!'
     });
 });
+
+app.post("/signup", userController.postSignup);
 
 export default app;

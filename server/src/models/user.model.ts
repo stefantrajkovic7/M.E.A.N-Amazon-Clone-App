@@ -49,6 +49,9 @@ UserSchema.methods.gravatar = size => {
         let md5 = crypto.createHash('md5').update(this.email).digest('hex');
         return 'https://gravatar.com/avatar/' + md5 + '?s' + size + '&d=retro';
     }
-    
+
 };
+
+const User = mongoose.model("User", UserSchema);
+export default User;
 
