@@ -47,5 +47,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.post("/signup", userController.postSignup);
+app.post("/login", userController.postLogin);
 
 export default app;

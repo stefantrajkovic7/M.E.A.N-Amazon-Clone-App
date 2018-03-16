@@ -17,7 +17,7 @@ export let postSignup = (req: any, res: Response, next: NextFunction) => {
     const errors = req.validationErrors();
 
     if (errors) {
-        return res.redirect("/signup");
+        res.status(400).json({errors});
     }
 
     const user = new User({
@@ -49,4 +49,46 @@ export let postSignup = (req: any, res: Response, next: NextFunction) => {
             })
         }
     });
+};
+
+export let postLogin = (req: any, res: Response) => {
+    req.assert("email", "Email is not valid").isEmail();
+    req.assert("password", "Password cannot be blank").notEmpty();
+    req.sanitize("email").normalizeEmail({gmail_remove_dots: false});
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+        res.status(400).json({errors});
+    }
+
+    User.findOne({ email: req.body.email }, (err, user: any) => {
+        if (err) throw err;
+
+        if (!user) {
+            res.json({
+                success: false,
+                message: 'Authentication Failed!'
+            })
+        } else if (user) {
+            let validPassword = user.comparePassword(req.body.password);
+            if (!validPassword) {
+                res.json({
+                    success: false,
+                    message: 'Authentication Failed!'
+                });
+            } else {
+                let token = jwt.sign({
+                    user: user
+                }, secret, {
+                    expiresIn: '1d'
+                });
+                res.json({
+                    success: true,
+                    token: token
+                })
+            }
+        }
+    })
+
 };
