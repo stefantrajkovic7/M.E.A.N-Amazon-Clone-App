@@ -10,7 +10,10 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {HeaderComponent} from "./shared/components/header.component";
 import {FooterComponent} from "./shared/components/footer.component";
 import {AppRoutingModule} from "./app-routing.module";
-import {MessageComponent} from "./components/message/message.component";
+import {AuthModule} from "./auth/auth.module";
+import {AuthGuardService} from "./auth/auth.guard";
+import {HttpModule} from "@angular/http";
+// import {CoreService} from "./core/core.service";
 
 
 @NgModule({
@@ -18,18 +21,19 @@ import {MessageComponent} from "./components/message/message.component";
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    HomeComponent,
-    MessageComponent
+    HomeComponent
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     AppRoutingModule,
     NgbModule.forRoot(),
+    AuthModule,
     RouterModule,
     CoreModule,
     SharedModule
   ],
-  providers: [],
+  providers: [AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

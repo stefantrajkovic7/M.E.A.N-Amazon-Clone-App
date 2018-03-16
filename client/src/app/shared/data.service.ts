@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { NavigationStart, Router } from '@angular/router';
-import {CoreService} from "../core/core.service";
+import { CoreService } from "../core/core.service";
 
 @Injectable()
 export class DataService {

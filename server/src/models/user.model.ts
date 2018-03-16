@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
     created: { type: Date, default: Date.now }
 });
 
-UserSchema.pre('save', (next: NextFunction) => {
+UserSchema.pre('save', function(next: NextFunction) {
     let user = this;
 
     if (!user.isModified('password')) return next();
@@ -35,7 +35,8 @@ UserSchema.pre('save', (next: NextFunction) => {
             next();
         })
 
-    })
+    });
+    next();
 });
 
 UserSchema.methods.comparePassword = password => bcrypt.compareSync(password, this.password);

@@ -1,13 +1,14 @@
 import * as express from "express";
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from 'express-serve-static-core';
 import * as bodyParser from "body-parser";
 import * as mongoose from "mongoose";
 import * as morgan from 'morgan';
 import * as bluebird from 'bluebird';
+import * as expressValidator from "express-validator";
 import * as cors from "cors";
 import {mongoURI} from "./config/development";
 
-import * as userController from "./controllers/account";
+const userController = require( "./controllers/account");
 const API_URL = 'http://localhost:4200';
 
 // Create Express server
@@ -26,6 +27,7 @@ mongoose.connect(mongoURI, {useMongoClient: true}).then(
 
 // Express configuration
 app.use(bodyParser.json());
+app.use(expressValidator());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
@@ -46,7 +48,7 @@ app.get("/", (req: Request, res: Response) => {
     });
 });
 
-app.post("/signup", userController.postSignup);
-app.post("/login", userController.postLogin);
+app.post("/api/accounts/signup", userController.postSignup);
+app.post("/api/accounts/login", userController.postLogin);
 
 export default app;

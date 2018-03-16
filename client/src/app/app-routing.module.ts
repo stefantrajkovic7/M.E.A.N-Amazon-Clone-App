@@ -4,7 +4,7 @@ import {HomeComponent} from "./components/home/home.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: '**', redirectTo: '' }
+  // { path: '**', redirectTo: '' }
   // { path: 'training', loadChildren: './training/training.module#TrainingModule'}
 ];
 

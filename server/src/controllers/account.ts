@@ -1,5 +1,7 @@
-import { Response, NextFunction } from "express";
+import * as express from 'express';
+import { Request, Response, NextFunction } from 'express-serve-static-core';
 const jwt = require('jsonwebtoken');
+// const req = require("express-validator");
 
 import { default as User } from "../models/user.model";
 import {secret} from "../config/development";
@@ -8,23 +10,13 @@ import {secret} from "../config/development";
  * POST /signup
  * Create a new local account.
  */
-export let postSignup = (req: any, res: Response, next: NextFunction) => {
-    req.assert("email", "Email is not valid").isEmail();
-    req.assert("password", "Password must be at least 4 characters long").len({ min: 4 });
-    req.assert("confirmPassword", "Passwords do not match").equals(req.body.password);
-    req.sanitize("email").normalizeEmail({ gmail_remove_dots: false });
-
-    const errors = req.validationErrors();
-
-    if (errors) {
-        res.status(400).json({errors});
-    }
+export let postSignup = ( req: Request, res: express.Response, next: express.NextFunction) => {
 
     const user = new User({
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
-        picture: this.user.gravatar(),
+        // picture: this.user.gravatar(),
         isSeller: req.body.isSeller
     });
 
@@ -42,6 +34,7 @@ export let postSignup = (req: any, res: Response, next: NextFunction) => {
             }, secret, {
                 expiresIn: '1d'
             });
+            console.log(user);
 
             res.json({
                 success: true,
@@ -51,16 +44,7 @@ export let postSignup = (req: any, res: Response, next: NextFunction) => {
     });
 };
 
-export let postLogin = (req: any, res: Response) => {
-    req.assert("email", "Email is not valid").isEmail();
-    req.assert("password", "Password cannot be blank").notEmpty();
-    req.sanitize("email").normalizeEmail({gmail_remove_dots: false});
-
-    const errors = req.validationErrors();
-
-    if (errors) {
-        res.status(400).json({errors});
-    }
+export let postLogin = (req: Request, res: express.Response) => {
 
     User.findOne({ email: req.body.email }, (err, user: any) => {
         if (err) throw err;
