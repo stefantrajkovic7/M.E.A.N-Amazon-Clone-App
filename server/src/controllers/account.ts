@@ -3,8 +3,9 @@ import { Request, Response, NextFunction } from 'express-serve-static-core';
 const jwt = require('jsonwebtoken');
 // const req = require("express-validator");
 
-import { default as User } from "../models/user.model";
+// const User = require("../models/user.model");
 import {secret} from "../config/development";
+import User from "../models/user.model";
 
 /**
  * POST /signup
@@ -35,31 +36,27 @@ export let postSignup = ( req: Request, res: express.Response, next: express.Nex
                 expiresIn: '1d'
             });
             console.log(user);
-
-            res.json({
-                success: true,
-                token: token
-            })
+            res.status(200).json({success: true, token: token});
         }
     });
 };
 
 export let postLogin = (req: Request, res: express.Response) => {
-
-    User.findOne({ email: req.body.email }, (err, user: any) => {
+    User.findOne({ email: req.body.email }, (err, user) => {
         if (err) throw err;
-
+        console.log(user);
         if (!user) {
             res.json({
                 success: false,
-                message: 'Authentication Failed!'
+                message: 'User Failed!'
             })
         } else if (user) {
             let validPassword = user.comparePassword(req.body.password);
+            console.log(validPassword);
             if (!validPassword) {
                 res.json({
                     success: false,
-                    message: 'Authentication Failed!'
+                    message: 'Password Failed!'
                 });
             } else {
                 let token = jwt.sign({
@@ -67,6 +64,7 @@ export let postLogin = (req: Request, res: express.Response) => {
                 }, secret, {
                     expiresIn: '1d'
                 });
+                console.log(user);
                 res.json({
                     success: true,
                     token: token

@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-const bcrypt = require('bcrypt'), SALT_WORK_FACTOR = 10;
+const bcrypt = require('bcrypt');
 import {NextFunction} from "express";
 const crypto = require('crypto');
 
@@ -25,33 +25,35 @@ UserSchema.pre('save', function(next: NextFunction) {
 
     if (!user.isModified('password')) return next();
 
-    bcrypt.genSaltSync(SALT_WORK_FACTOR, (err, salt) => {
-        if (err) return next(err);
+    bcrypt.genSalt(10, function(err, salt) {
+        if (err) return next();
 
-        bcrypt.hash(user.password, salt, (err, hash) => {
+        bcrypt.hash(user.password, salt, function(err, hash) {
             if (err) return next(err);
-
             user.password = hash;
+            user.save(user);
             next();
-        })
-
+        });
     });
+
     next();
 });
 
-UserSchema.methods.comparePassword = password => bcrypt.compareSync(password, this.password);
-
-UserSchema.methods.gravatar = size => {
-    if (!this.size) size = 200;
-
-    if (!this.email) {
-        return 'https://gravatar.com/avatar/?s' + size + '&d=retro';
-    } else {
-        let md5 = crypto.createHash('md5').update(this.email).digest('hex');
-        return 'https://gravatar.com/avatar/' + md5 + '?s' + size + '&d=retro';
-    }
-
+UserSchema.methods.comparePassword = function(password) {
+    bcrypt.compareSync(password, this.password)
 };
+
+// UserSchema.methods.gravatar = function(size) {
+//     if (!this.size) size = 200;
+//
+//     if (!this.email) {
+//         return 'https://gravatar.com/avatar/?s' + size + '&d=retro';
+//     } else {
+//         let md5 = crypto.createHash('md5').update(this.email).digest('hex');
+//         return 'https://gravatar.com/avatar/' + md5 + '?s' + size + '&d=retro';
+//     }
+//
+// };
 
 const User = mongoose.model("User", UserSchema);
 export default User;
