@@ -39,15 +39,6 @@ UserSchema.methods.comparePassword = function(candidatePassword, callback) {
     });
 };
 
-// UserSchema.methods.passwordIsValid = function (password) {
-//     try {
-//         return bcrypt.compareSync(password, this.password);
-//     }
-//     catch (err) {
-//         throw err;
-//     }
-// };
-
 UserSchema.set('toJSON', {
     transform: function(doc, ret, options) {
         delete ret.password;
@@ -55,17 +46,17 @@ UserSchema.set('toJSON', {
     }
 });
 
-// UserSchema.methods.gravatar = function(size) {
-//     if (!this.size) size = 200;
-//
-//     if (!this.email) {
-//         return 'https://gravatar.com/avatar/?s' + size + '&d=retro';
-//     } else {
-//         let md5 = crypto.createHash('md5').update(this.email).digest('hex');
-//         return 'https://gravatar.com/avatar/' + md5 + '?s' + size + '&d=retro';
-//     }
-//
-// };
+UserSchema.methods.gravatar = function(size) {
+    if (!this.size) size = 200;
+
+    if (!this.email) {
+        return 'https://gravatar.com/avatar/?s' + size + '&d=retro';
+    } else {
+        let md5 = crypto.createHash('md5').update(this.email).digest('hex');
+        return 'https://gravatar.com/avatar/' + md5 + '?s' + size + '&d=retro';
+    }
+
+};
 
 const User = mongoose.model("User", UserSchema);
 export default User;

@@ -2,17 +2,16 @@ import * as express from 'express';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 const jwt = require('jsonwebtoken');
 import {secret} from "../config/development";
-import User from "../models/user.model";
+import  User from "../models/user.model";
 
 export let postSignup = function( req: Request, res: express.Response, next: express.NextFunction) {
 
-    const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        // picture: this.user.gravatar(),
-        isSeller: req.body.isSeller
-    });
+    let user: any = new User();
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.password = req.body.password;
+    user.picture = user.gravatar();
+    user.isSeller = req.body.isSeller;
 
     User.findOne({ email: req.body.email }, function(err, existingUser) {
         if (err) return next(err);
@@ -28,9 +27,7 @@ export let postSignup = function( req: Request, res: express.Response, next: exp
                 expiresIn: '1d'
             });
 
-            const obj = new User(req.body);
-            console.log(obj);
-            return obj.save(function(err, item) {
+            return user.save(function(err, item) {
                 if (err) {
                     return console.error(err);
                 }
