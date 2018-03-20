@@ -39,6 +39,15 @@ UserSchema.methods.comparePassword = function(candidatePassword, callback) {
     });
 };
 
+// UserSchema.methods.passwordIsValid = function (password) {
+//     try {
+//         return bcrypt.compareSync(password, this.password);
+//     }
+//     catch (err) {
+//         throw err;
+//     }
+// };
+
 UserSchema.set('toJSON', {
     transform: function(doc, ret, options) {
         delete ret.password;

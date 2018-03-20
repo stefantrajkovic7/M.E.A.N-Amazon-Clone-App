@@ -43,13 +43,13 @@ export let postSignup = function( req: Request, res: express.Response, next: exp
 export let postLogin = (req: express.Request, res: express.Response) => {
     let model = User;
 
-    model.findOne({ email: req.body.email }, (err, user) => {
+    model.findOne({ email: req.body.email }, (err, user: any) => {
         if (err) throw err;
         console.log(user);
         if (!user) {
             return res.sendStatus(403);
         }
-        model.schema.methods.comparePassword(req.body.password, (error, isMatch) => {
+        user.comparePassword(req.body.password, function(error, isMatch) {
             console.log(isMatch);
             if (!isMatch) return res.sendStatus(403);
             const token = jwt.sign({ user: user }, secret, {expiresIn: '1d'});
