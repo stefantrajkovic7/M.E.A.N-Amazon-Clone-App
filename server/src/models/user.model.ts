@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
+import * as bcrypt from 'bcrypt';
 import {NextFunction} from "express";
 const crypto = require('crypto');
 
@@ -20,28 +21,30 @@ const UserSchema = new mongoose.Schema({
     created: { type: Date, default: Date.now }
 });
 
-UserSchema.pre('save', function(next: NextFunction) {
+UserSchema.pre("save", function(next: NextFunction) {
     let user = this;
 
     if (!user.isModified('password')) return next();
-
-    bcrypt.genSalt(10, function(err, salt) {
-        if (err) return next();
-
-        bcrypt.hash(user.password, salt, function(err, hash) {
+        bcrypt.hash(user.password, 10, function(err, hash) {
             if (err) return next(err);
             user.password = hash;
-            user.save(user);
             next();
         });
-    });
-
-    next();
 });
 
-UserSchema.methods.comparePassword = function(password) {
-    bcrypt.compareSync(password, this.password)
+UserSchema.methods.comparePassword = function(candidatePassword, callback) {
+    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        if (err)  return callback(err);
+        callback(null, isMatch);
+    });
 };
+
+UserSchema.set('toJSON', {
+    transform: function(doc, ret, options) {
+        delete ret.password;
+        return ret;
+    }
+});
 
 // UserSchema.methods.gravatar = function(size) {
 //     if (!this.size) size = 200;
