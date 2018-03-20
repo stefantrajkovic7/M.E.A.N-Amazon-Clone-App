@@ -65,6 +65,7 @@ export class SignupComponent implements OnInit {
         if (data['success']) {
           localStorage.setItem('token', data['token']);
           this.data.success('Registration successful!');
+          this.router.navigate(['/']);
         } else {
           this.data.error(data['message']);
         }

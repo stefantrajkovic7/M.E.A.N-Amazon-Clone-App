@@ -50,7 +50,7 @@ export let postLogin = (req: express.Request, res: express.Response) => {
             console.log(isMatch);
             if (!isMatch) return res.sendStatus(403);
             const token = jwt.sign({ user: user }, secret, {expiresIn: '1d'});
-            res.status(200).json({ token: token });
+            return res.status(200).json({ success: true, token: token });
         });
 
     })
