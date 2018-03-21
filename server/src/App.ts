@@ -7,6 +7,7 @@ import * as bluebird from 'bluebird';
 import * as expressValidator from "express-validator";
 import * as cors from "cors";
 import {mongoURI} from "./config/development";
+import {jwtCheck} from "./middlewares/check-jwt";
 
 const userController = require( "./controllers/account");
 const API_URL = 'http://localhost:4200';
@@ -50,5 +51,10 @@ app.get("/", (req: Request, res: Response) => {
 
 app.post("/api/accounts/signup", userController.postSignup);
 app.post("/api/accounts/login", userController.postLogin);
+
+app.route("/api/accounts/profile")
+    .get(jwtCheck, userController.getProfile)
+    .post();
+
 
 export default app;

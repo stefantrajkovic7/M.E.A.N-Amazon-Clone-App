@@ -56,3 +56,23 @@ export let postLogin = (req: express.Request, res: express.Response) => {
     })
 
 };
+
+export let getProfile = function( req: Request, res: express.Response) {
+    User.findOne({ _id: (<any>req).decoded.user._id }, (err, user) => {
+        res.json({
+            success: true,
+            user: user,
+            message: 'Successful'
+        });
+    });
+};
+
+export let postProfile = function( req: Request, res: express.Response) {
+    User.findOne({ _id: (<any>req).decoded.user._id }, (err, user) => {
+        res.json({
+            success: true,
+            user: user,
+            message: 'Successful'
+        });
+    });
+};
