@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import User from "../../../models/user.model";
-import {secret} from "../../../config/development";
+const config = require('../../../config/development');
 const jwt = require('jsonwebtoken');
 
 exports.signup = ( req: Request, res: Response, next: NextFunction) => {
@@ -22,7 +22,7 @@ exports.signup = ( req: Request, res: Response, next: NextFunction) => {
         } else {
             let token = jwt.sign({
                 user: user
-            }, secret, {
+            }, config.secret, {
                 expiresIn: '1d'
             });
 
@@ -48,7 +48,7 @@ exports.login = (req: Request, res: Response) => {
         user.comparePassword(req.body.password, function(error, isMatch) {
             console.log(isMatch);
             if (!isMatch) return res.sendStatus(403);
-            const token = jwt.sign({ user: user }, secret, {expiresIn: '1d'});
+            const token = jwt.sign({ user: user }, config.secret, {expiresIn: '1d'});
             return res.status(200).json({ success: true, token: token });
         });
 
