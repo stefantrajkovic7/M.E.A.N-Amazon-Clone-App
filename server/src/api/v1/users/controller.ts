@@ -1,10 +1,9 @@
-import * as express from 'express';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
+import User from "../../../models/user.model";
+import {secret} from "../../../config/development";
 const jwt = require('jsonwebtoken');
-import {secret} from "../config/development";
-import  User from "../models/user.model";
 
-export let postSignup = function( req: Request, res: express.Response, next: express.NextFunction) {
+exports.signup = ( req: Request, res: Response, next: NextFunction) => {
 
     let user: any = new User();
     user.name = req.body.name;
@@ -13,7 +12,7 @@ export let postSignup = function( req: Request, res: express.Response, next: exp
     user.picture = user.gravatar();
     user.isSeller = req.body.isSeller;
 
-    User.findOne({ email: req.body.email }, function(err, existingUser) {
+    User.findOne({ email: req.body.email }, (err, existingUser) => {
         if (err) return next(err);
         if (existingUser) {
             res.json({
@@ -27,7 +26,7 @@ export let postSignup = function( req: Request, res: express.Response, next: exp
                 expiresIn: '1d'
             });
 
-            return user.save(function(err, item) {
+            return user.save((err, item) => {
                 if (err) {
                     return console.error(err);
                 }
@@ -37,9 +36,9 @@ export let postSignup = function( req: Request, res: express.Response, next: exp
     });
 };
 
-export let postLogin = (req: express.Request, res: express.Response) => {
+exports.login = (req: Request, res: Response) => {
     let model = User;
-
+    console.log(model);
     model.findOne({ email: req.body.email }, (err, user: any) => {
         if (err) throw err;
         console.log(user);
@@ -57,7 +56,7 @@ export let postLogin = (req: express.Request, res: express.Response) => {
 
 };
 
-export let getProfile = function( req: Request, res: express.Response) {
+exports.show = ( req: Request, res: Response) => {
     User.findOne({ _id: (<any>req).decoded.user._id }, (err, user) => {
         res.json({
             success: true,
@@ -67,7 +66,7 @@ export let getProfile = function( req: Request, res: express.Response) {
     });
 };
 
-export let postProfile = function( req: Request, res: express.Response) {
+exports.create = ( req: Request, res: Response) => {
     User.findOne({ _id: (<any>req).decoded.user._id }, (err, user) => {
         res.json({
             success: true,

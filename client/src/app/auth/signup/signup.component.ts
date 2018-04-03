@@ -54,7 +54,7 @@ export class SignupComponent implements OnInit {
     try {
       if (this.validate()) {
         const data = await this.rest.post(
-          'http://localhost:3000/api/accounts/signup',
+          'http://localhost:3000/api/v1/users/signup',
           {
             name: this.name,
             email: this.email,

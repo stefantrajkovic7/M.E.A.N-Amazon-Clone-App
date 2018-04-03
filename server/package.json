@@ -1,18 +1,17 @@
 {
-  "name": "@risingstack/rest-api-typescript",
+  "name": "amazon-node-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "server": "nodemon dist/index.js",
+    "dev": "concurrently \"tsc --watch\" \"nodemon dist/index.js\"",
     "test": "tsc && mocha dist/**/*.spec.js",
     "lint": "eslint src --ext ts",
     "tsc": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "Stefan Trajkovic",
   "license": "ISC",
   "dependencies": {
     "@types/async": "^2.0.45",
